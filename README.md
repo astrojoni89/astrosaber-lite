@@ -4,5 +4,7 @@
   Author: astrojoni89
 -->
 
-# astroSABER lite GUI application
+# astroSABER-lite GUI application
 <img src="./images/astrosaber_lite_final.gif" width="480">
+
+Check out the astrosaber package 
