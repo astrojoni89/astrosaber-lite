@@ -6,4 +6,5 @@
 
 # astroSABER lite GUI application
 
-![astroSABER-lite logo](./images/astrosaber_lite_final.gif)  
+![astroSABER-lite logo](./images/astrosaber_lite_final.gif) 
+<img src="./images/astrosaber_lite_final.gif" width="480">
