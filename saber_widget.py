@@ -17,7 +17,7 @@ from PySide6.QtGui import QFont, QPixmap
 from validators import NumbersOnly, FloatsOnly
 from custom_style import set_highlight, set_normal_style, set_bold, set_normal_font
 from animated_toggle import AnimatedToggle
-from astrosaber.training import saberTraining
+from astrosaber.hisa import HisaExtraction
 
 
 class saberWidget(QWidget):
@@ -30,7 +30,7 @@ class saberWidget(QWidget):
         self.resize(self.sizeHint())
 
         # status label
-        self.status_label = QLabel("\n\n")
+        self.status_label = QLabel("\n\n\n")
         self.status_param = False
 
         # file browser
@@ -41,23 +41,28 @@ class saberWidget(QWidget):
         self.text_holder_label_dialog = QLabel("No file selected")
         self.text_holder_label_dialog.setWordWrap(True)
 
-        # ncpus field
-        self.text_holder_label_ncpus = QLabel("Number of CPUs")
-        self.line_edit_ncpus = QLineEdit(placeholderText="e.g. 4")
-        self.line_edit_ncpus.setValidator(NumbersOnly())
-        self.text_label_available_ncpus = QLabel("/" + str(multiprocessing.cpu_count()))
+        # noise field
+        self.text_holder_label_noise = QLabel("Noise*")
+        self.line_edit_noise = QLineEdit(placeholderText="e.g. 4.")
+        self.line_edit_noise.setValidator(FloatsOnly())
         # get style
-        self.ss_line_edit_ncpus = self.line_edit_ncpus.styleSheet()
+        self.ss_line_edit_noise = self.line_edit_noise.styleSheet()
         ###
 
         # phase field
         self.text_holder_label_phase = QLabel("Two-phase")
+        self.text_holder_label_phase.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
+        )
         self.phase_toggle = AnimatedToggle()
         self.phase_toggle.setFixedSize(self.phase_toggle.sizeHint())
         self.phase_toggle.setChecked(True)
 
         # add residual
         self.text_holder_label_addres = QLabel("Add residual")
+        self.text_holder_label_addres.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
+        )
         self.addres_toggle = AnimatedToggle()
         self.addres_toggle.setFixedSize(self.addres_toggle.sizeHint())
         self.addres_toggle.setChecked(True)
@@ -75,6 +80,15 @@ class saberWidget(QWidget):
         self.ss_line_edit_lam2 = self.line_edit_lam2.styleSheet()
         ###
 
+        # ncpus field
+        self.text_holder_label_ncpus = QLabel("#CPUs")
+        self.line_edit_ncpus = QLineEdit(placeholderText="e.g. 4")
+        self.line_edit_ncpus.setValidator(NumbersOnly())
+        self.text_label_available_ncpus = QLabel("/" + str(multiprocessing.cpu_count()))
+        # get style
+        self.ss_line_edit_ncpus = self.line_edit_ncpus.styleSheet()
+        ###
+
         # button to set params
         button_set_param = QPushButton("Set Parameters")
         button_set_param.clicked.connect(self.validate_record)
@@ -90,26 +104,29 @@ class saberWidget(QWidget):
         layout.addWidget(self.button_fb, 1, 0, 1, 1)
         layout.addWidget(self.text_holder_label_dialog, 1, 1, 1, 3)
 
-        layout.addWidget(self.text_holder_label_ncpus, 2, 0, 1, 1)
-        layout.addWidget(self.line_edit_ncpus, 2, 1, 1, 2)
-        layout.addWidget(self.text_label_available_ncpus, 2, 3, 1, 1)
+        layout.addWidget(self.text_holder_label_noise, 2, 0, 1, 1)
+        layout.addWidget(self.line_edit_noise, 2, 1, 1, 2)
 
         layout.addWidget(self.text_holder_label_phase, 3, 0, 1, 1)
         layout.addWidget(self.phase_toggle, 3, 1, 1, 1)
-        layout.addWidget(self.text_holder_label_addres, 3, 3, 1, 1)
-        layout.addWidget(self.addres_toggle, 3, 4, 1, 1)
+        layout.addWidget(self.text_holder_label_addres, 3, 2, 1, 1)
+        layout.addWidget(self.addres_toggle, 3, 3, 1, 1)
 
         layout.addWidget(self.text_holder_label_lam1, 4, 0, 1, 1)
         layout.addWidget(self.line_edit_lam1, 4, 1, 1, 1)
         layout.addWidget(self.text_holder_label_lam2, 4, 2, 1, 1)
         layout.addWidget(self.line_edit_lam2, 4, 3, 1, 1)
 
+        layout.addWidget(self.text_holder_label_ncpus, 5, 0, 1, 1)
+        layout.addWidget(self.line_edit_ncpus, 5, 1, 1, 1)
+        layout.addWidget(self.text_label_available_ncpus, 5, 2, 1, 1)
+
         # set_param button
-        layout.addWidget(button_set_param, 5, 1, 1, 2)
+        layout.addWidget(button_set_param, 6, 1, 1, 2)
         # status label
-        layout.addWidget(self.status_label, 6, 0, 1, 4)
+        layout.addWidget(self.status_label, 7, 0, 1, 4)
         # run_optimize button
-        layout.addWidget(button_run_optimize, 7, 1, 1, 2)
+        layout.addWidget(button_run_optimize, 8, 1, 1, 2)
 
         self.setLayout(layout)
 
@@ -129,9 +146,17 @@ class saberWidget(QWidget):
             self.button_fb.setFocus()
             return
 
-        # ncpu sect.
-        if self.line_edit_ncpus.text() == "":
-            self.line_edit_ncpus.setText("1")
+        # noise sect.
+        if self.line_edit_noise.text() == "":
+            self.status_label.setText("Missing required fields.")
+            self.line_edit_noise.setFocus()
+            set_highlight(self.line_edit_noise)
+            set_bold(self.text_holder_label_noise)
+            return
+
+        # noise sect.
+        set_normal_style(self.line_edit_noise, self.ss_line_edit_noise)
+        set_normal_font(self.text_holder_label_noise)
 
         # lam1 sect.
         if self.line_edit_lam1.text() == "":
@@ -157,6 +182,10 @@ class saberWidget(QWidget):
         set_normal_style(self.line_edit_lam2, self.ss_line_edit_lam2)
         set_normal_font(self.text_holder_label_lam2)
 
+        # ncpu sect.
+        if self.line_edit_ncpus.text() == "":
+            self.line_edit_ncpus.setText("1")
+
         # set parameters of astrosaber prep
         self.set_params()
         self.status_update()
@@ -165,33 +194,33 @@ class saberWidget(QWidget):
 
     def set_params(self):
         ###initialize training set preparation
-        self.train = saberTraining(pickle_file=self.filename[0])
+        self.hisa = HisaExtraction(fitsfile=self.filename[0])
 
         ###you can adjust the number of cpus to use
-        self.train.ncpus = int(self.line_edit_ncpus.text())
+        self.hisa.ncpus = int(self.line_edit_ncpus.text())
 
         ###smoothing phase and add residual
         if self.phase_toggle.isChecked():
-            self.train.smoothing = "two"
+            self.hisa.smoothing = "two"
         else:
-            self.train.smoothing = "one"
+            self.hisa.smoothing = "one"
 
-        self.train.add_residual = self.addres_toggle.isChecked()
+        self.hisa.add_residual = self.addres_toggle.isChecked()
 
         ###set the initial guesses for the smoothing parameters (better to start low rather than high)
-        self.train.lam1_initial = float(self.line_edit_lam1.text())
-        self.train.lam2_initial = float(self.line_edit_lam2.text())
+        self.hisa.lam1 = float(self.line_edit_lam1.text())
+        self.hisa.lam2 = float(self.line_edit_lam2.text())
 
     def run_optimize(self):
         if self.status_param:
-            self.train.training()
+            self.hisa.training()
             print("SABER run successful!")
             self.information_box("SABER run was successful!")
 
     def status_update(self):
         # self.status_label.setAlignment(QtCore.Qt.AlignLeft)
         self.status_label.setText(
-            f"Set number of CPUs to {int(self.line_edit_ncpus.text())}\nTwo-phase: {self.phase_toggle.isChecked()}, Add residual: {self.addres_toggle.isChecked()}\nSet Lambda 1 to {float(self.line_edit_lam1.text())}, Set Lambda 2 to {float(self.line_edit_lam2.text())}"
+            f"Set noise to {float(self.line_edit_noise.text())}\nTwo-phase: {self.phase_toggle.isChecked()}, Add residual: {self.addres_toggle.isChecked()}\nSet Lambda 1 to {float(self.line_edit_lam1.text())}, Set Lambda 2 to {float(self.line_edit_lam2.text())}\nSet number of CPUs to {int(self.line_edit_ncpus.text())}"
         )
 
     def information_box(self, infotext):

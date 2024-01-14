@@ -83,10 +83,10 @@ class prepareWidget(QWidget):
         layout.addWidget(self.button_fb, 1, 0, 1, 1)
         layout.addWidget(self.text_holder_label_dialog, 1, 1, 1, 3)
 
-        layout.addWidget(self.text_holder_label_training, 2, 0, 1, 2)
+        layout.addWidget(self.text_holder_label_training, 2, 0, 1, 1)
         layout.addWidget(self.line_edit_training, 2, 1, 1, 2)
 
-        layout.addWidget(self.text_holder_label_noise, 3, 0, 1, 2)
+        layout.addWidget(self.text_holder_label_noise, 3, 0, 1, 1)
         layout.addWidget(self.line_edit_noise, 3, 1, 1, 2)
 
         layout.addWidget(self.text_holder_label_lw, 4, 0, 1, 1)

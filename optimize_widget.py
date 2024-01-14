@@ -42,7 +42,7 @@ class optimizeWidget(QWidget):
         self.text_holder_label_dialog.setWordWrap(True)
 
         # ncpus field
-        self.text_holder_label_ncpus = QLabel("Number of CPUs")
+        self.text_holder_label_ncpus = QLabel("#CPUs")
         self.line_edit_ncpus = QLineEdit(placeholderText="e.g. 4")
         self.line_edit_ncpus.setValidator(NumbersOnly())
         self.text_label_available_ncpus = QLabel("/" + str(multiprocessing.cpu_count()))
@@ -52,12 +52,18 @@ class optimizeWidget(QWidget):
 
         # phase field
         self.text_holder_label_phase = QLabel("Two-phase")
+        self.text_holder_label_phase.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
+        )
         self.phase_toggle = AnimatedToggle()
         self.phase_toggle.setFixedSize(self.phase_toggle.sizeHint())
         self.phase_toggle.setChecked(True)
 
         # add residual
         self.text_holder_label_addres = QLabel("Add residual")
+        self.text_holder_label_addres.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
+        )
         self.addres_toggle = AnimatedToggle()
         self.addres_toggle.setFixedSize(self.addres_toggle.sizeHint())
         self.addres_toggle.setChecked(True)
@@ -90,19 +96,19 @@ class optimizeWidget(QWidget):
         layout.addWidget(self.button_fb, 1, 0, 1, 1)
         layout.addWidget(self.text_holder_label_dialog, 1, 1, 1, 3)
 
-        layout.addWidget(self.text_holder_label_ncpus, 2, 0, 1, 1)
-        layout.addWidget(self.line_edit_ncpus, 2, 1, 1, 2)
-        layout.addWidget(self.text_label_available_ncpus, 2, 3, 1, 1)
+        layout.addWidget(self.text_holder_label_phase, 2, 0, 1, 1)
+        layout.addWidget(self.phase_toggle, 2, 1, 1, 1)
+        layout.addWidget(self.text_holder_label_addres, 2, 2, 1, 1)
+        layout.addWidget(self.addres_toggle, 2, 3, 1, 1)
 
-        layout.addWidget(self.text_holder_label_phase, 3, 0, 1, 1)
-        layout.addWidget(self.phase_toggle, 3, 1, 1, 1)
-        layout.addWidget(self.text_holder_label_addres, 3, 3, 1, 1)
-        layout.addWidget(self.addres_toggle, 3, 4, 1, 1)
+        layout.addWidget(self.text_holder_label_lam1, 3, 0, 1, 1)
+        layout.addWidget(self.line_edit_lam1, 3, 1, 1, 1)
+        layout.addWidget(self.text_holder_label_lam2, 3, 2, 1, 1)
+        layout.addWidget(self.line_edit_lam2, 3, 3, 1, 1)
 
-        layout.addWidget(self.text_holder_label_lam1, 4, 0, 1, 1)
-        layout.addWidget(self.line_edit_lam1, 4, 1, 1, 1)
-        layout.addWidget(self.text_holder_label_lam2, 4, 2, 1, 1)
-        layout.addWidget(self.line_edit_lam2, 4, 3, 1, 1)
+        layout.addWidget(self.text_holder_label_ncpus, 4, 0, 1, 1)
+        layout.addWidget(self.line_edit_ncpus, 4, 1, 1, 1)
+        layout.addWidget(self.text_label_available_ncpus, 4, 2, 1, 1)
 
         # set_param button
         layout.addWidget(button_set_param, 5, 1, 1, 2)
@@ -129,10 +135,6 @@ class optimizeWidget(QWidget):
             self.button_fb.setFocus()
             return
 
-        # ncpu sect.
-        if self.line_edit_ncpus.text() == "":
-            self.line_edit_ncpus.setText("1")
-
         # lam1 sect.
         if self.line_edit_lam1.text() == "":
             self.status_label.setText("Missing required fields.")
@@ -156,6 +158,10 @@ class optimizeWidget(QWidget):
         # lam2 sect.
         set_normal_style(self.line_edit_lam2, self.ss_line_edit_lam2)
         set_normal_font(self.text_holder_label_lam2)
+
+        # ncpu sect.
+        if self.line_edit_ncpus.text() == "":
+            self.line_edit_ncpus.setText("1")
 
         # set parameters of astrosaber prep
         self.set_params()
@@ -191,7 +197,7 @@ class optimizeWidget(QWidget):
     def status_update(self):
         # self.status_label.setAlignment(QtCore.Qt.AlignLeft)
         self.status_label.setText(
-            f"Set number of CPUs to {int(self.line_edit_ncpus.text())}\nTwo-phase: {self.phase_toggle.isChecked()}, Add residual: {self.addres_toggle.isChecked()}\nSet Lambda 1 to {float(self.line_edit_lam1.text())}, Set Lambda 2 to {float(self.line_edit_lam2.text())}"
+            f"Two-phase: {self.phase_toggle.isChecked()}, Add residual: {self.addres_toggle.isChecked()}\nSet Lambda 1 to {float(self.line_edit_lam1.text())}, Set Lambda 2 to {float(self.line_edit_lam2.text())}\nSet number of CPUs to {int(self.line_edit_ncpus.text())}"
         )
 
     def information_box(self, infotext):

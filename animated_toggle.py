@@ -23,17 +23,19 @@ class AnimatedToggle(QCheckBox):
         self,
         parent=None,
         bar_color=Qt.gray,
-        checked_color="#8ab4f7", #00B0FF",
+        checked_color="#8ab4f7",  # 00B0FF",
         handle_color=Qt.white,
         pulse_unchecked_color="#44999999",
-        pulse_checked_color="#4400B0EE",
+        pulse_checked_color="#448ab4f7",
     ):
         super().__init__(parent)
 
         # Save our properties on the object via self, so we can access them later
         # in the paintEvent.
         self._bar_brush = QBrush(bar_color)
-        self._bar_checked_brush = QBrush(QColor(checked_color).lighter())
+        self._bar_checked_brush = QBrush(
+            QColor("#cadfff")
+        )  # QBrush(QColor(checked_color).lighter())
 
         self._handle_brush = QBrush(handle_color)
         self._handle_checked_brush = QBrush(QColor(checked_color))
