@@ -213,7 +213,7 @@ class saberWidget(QWidget):
 
     def run_optimize(self):
         if self.status_param:
-            self.hisa.training()
+            self.hisa.saber()
             print("SABER run successful!")
             self.information_box("SABER run was successful!")
 
