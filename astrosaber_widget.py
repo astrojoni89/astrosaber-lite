@@ -4,7 +4,7 @@ from PySide6 import QtCore
 
 from prepare_widget import prepareWidget
 from optimize_widget import optimizeWidget
-from saber import saberWidget
+from saber_widget import saberWidget
 
 
 class mainWidget(QWidget):
