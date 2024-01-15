@@ -27,6 +27,19 @@ class prepareWidget(QWidget):
 
         self.resize(self.sizeHint())
 
+        # initialize info box
+        self.message = QMessageBox()
+        self.message.setMinimumSize(700, 200)
+        self.message.setWindowTitle("Done!")
+        infotext = "Preparation run was successful!"
+        self.message.setText(infotext)
+        # message.setInformativeText("Do you want to do something about it?")
+        self.message.setIcon(QMessageBox.Information)
+        self.message.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        self.message.setDefaultButton(QMessageBox.Ok)
+        self.message.button(QMessageBox.Ok).setText("Continue")
+        self.message.button(QMessageBox.Cancel).setText("Quit")
+
         # status label
         self.status_label = QLabel("\n\n")
         self.status_param = False
@@ -185,8 +198,7 @@ class prepareWidget(QWidget):
     def run_prepare(self):
         if self.status_param:
             self.prep.prepare_training()
-            print("Prepare run successful!")
-            self.information_box("Preparation run was successful!")
+            self.information_box()
 
     def status_update(self):
         # self.status_label.setAlignment(QtCore.Qt.AlignLeft)
@@ -196,24 +208,8 @@ class prepareWidget(QWidget):
             + f"{float(self.line_edit_lw_std.text())}"
         )
 
-    def information_box(self, infotext):
-        message = QMessageBox()
-        message.setMinimumSize(700, 200)
-        message.setWindowTitle("Done!")
-        message.setText(infotext)
-        # message.setInformativeText("Do you want to do something about it?")
-        message.setIcon(QMessageBox.Information)
-        message.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-        message.setDefaultButton(QMessageBox.Ok)
-        message.button(QMessageBox.Cancel).setText("Quit")
-
+    def information_box(self):
         # show message box
-        ret = message.exec()
-        if ret == QMessageBox.Ok:
-            # pass
-            self.setCurrentIndex(1)
-        elif ret == QMessageBox.Cancel:
-            # self.close()
+        ret = self.message.exec()
+        if ret == QMessageBox.Cancel:
             self.app.quit()
-
-

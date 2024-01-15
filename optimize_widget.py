@@ -29,6 +29,19 @@ class optimizeWidget(QWidget):
 
         self.resize(self.sizeHint())
 
+        # initialize info box
+        self.message = QMessageBox()
+        self.message.setMinimumSize(700, 200)
+        self.message.setWindowTitle("Done!")
+        infotext = "Optmization run was successful!"
+        self.message.setText(infotext)
+        # message.setInformativeText("Do you want to do something about it?")
+        self.message.setIcon(QMessageBox.Information)
+        self.message.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        self.message.setDefaultButton(QMessageBox.Ok)
+        self.message.button(QMessageBox.Ok).setText("Continue")
+        self.message.button(QMessageBox.Cancel).setText("Quit")
+
         # status label
         self.status_label = QLabel("\n\n")
         self.status_param = False
@@ -191,8 +204,7 @@ class optimizeWidget(QWidget):
     def run_optimize(self):
         if self.status_param:
             self.train.training()
-            print("Optimization run successful!")
-            self.information_box("Optmization run was successful!")
+            self.information_box()
 
     def status_update(self):
         # self.status_label.setAlignment(QtCore.Qt.AlignLeft)
@@ -200,21 +212,8 @@ class optimizeWidget(QWidget):
             f"Two-phase: {self.phase_toggle.isChecked()}, Add residual: {self.addres_toggle.isChecked()}\nSet Lambda 1 to {float(self.line_edit_lam1.text())}, Set Lambda 2 to {float(self.line_edit_lam2.text())}\nSet number of CPUs to {int(self.line_edit_ncpus.text())}"
         )
 
-    def information_box(self, infotext):
-        message = QMessageBox()
-        message.setMinimumSize(700, 200)
-        message.setWindowTitle("Done!")
-        message.setText(infotext)
-        # message.setInformativeText("Do you want to do something about it?")
-        message.setIcon(QMessageBox.Information)
-        message.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-        message.setDefaultButton(QMessageBox.Ok)
-        message.button(QMessageBox.Cancel).setText("Quit")
-
+    def information_box(self):
         # show message box
-        ret = message.exec()
-        if ret == QMessageBox.Ok:
-            pass
-        elif ret == QMessageBox.Cancel:
-            # self.close()
+        ret = self.message.exec()
+        if ret == QMessageBox.Cancel:
             self.app.quit()

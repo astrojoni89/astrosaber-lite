@@ -10,6 +10,7 @@ from saber_widget import saberWidget
 class mainWidget(QWidget):
     def __init__(self, app):
         super().__init__()
+        self.app = app
 
         self.setWindowTitle("astrosaber lite")
         self.setWindowIcon(QIcon("images/icon.ico"))
@@ -24,12 +25,38 @@ class mainWidget(QWidget):
 
         layout = QVBoxLayout()
         layout.addWidget(image_label)
-        tabwidget = tabWidget(app)
-        layout.addWidget(tabwidget)
+        self.tabwidget = tabWidget(app)
+
+        layout.addWidget(self.tabwidget)
 
         self.setLayout(layout)
 
         self.setMinimumSize(self.sizeHint())
+
+        # connect slots of info boxes to signals
+        self.tabwidget.tab1.message.button(QMessageBox.Ok).clicked.connect(
+            self.change_tab
+        )
+        self.tabwidget.tab1.message.button(QMessageBox.Cancel).clicked.connect(
+            self.app.quit()
+        )
+        self.tabwidget.tab2.message.button(QMessageBox.Ok).clicked.connect(
+            self.change_tab
+        )
+        self.tabwidget.tab2.message.button(QMessageBox.Cancel).clicked.connect(
+            self.app.quit()
+        )
+        self.tabwidget.tab3.message.button(QMessageBox.Ok).clicked.connect(
+            self.change_tab
+        )
+        self.tabwidget.tab3.message.button(QMessageBox.Cancel).clicked.connect(
+            self.app.quit()
+        )
+
+    def change_tab(self):
+        cur_index = self.tabwidget.currentIndex()
+        if cur_index < self.tabwidget.count() - 1:
+            self.tabwidget.setCurrentIndex(cur_index + 1)
 
 
 class tabWidget(QTabWidget):
@@ -43,6 +70,3 @@ class tabWidget(QTabWidget):
         self.preparetab = self.addTab(self.tab1, "1. Prepare data")
         self.optimizetab = self.addTab(self.tab2, "2. Optimize")
         self.sabertab = self.addTab(self.tab3, "3. SABER")
-
-    def change_tab(self, name):
-        self.setCurrentIndex(name)
