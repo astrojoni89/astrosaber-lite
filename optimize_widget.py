@@ -69,11 +69,11 @@ class optimizeWidget(QWidget):
         self.addres_toggle.setChecked(True)
 
         # lambda field
-        self.text_holder_label_lam1 = QLabel("Initial Lambda 1*")
+        self.text_holder_label_lam1 = QLabel("Initial \u03BB\u2081*")
         self.line_edit_lam1 = QLineEdit(placeholderText="e.g. 2.")
         self.line_edit_lam1.setValidator(FloatsOnly())
 
-        self.text_holder_label_lam2 = QLabel("Initial Lambda 2*")
+        self.text_holder_label_lam2 = QLabel("Initial \u03BB\u2082*")
         self.line_edit_lam2 = QLineEdit(placeholderText="e.g. 1.")
         self.line_edit_lam2.setValidator(FloatsOnly())
         # get style

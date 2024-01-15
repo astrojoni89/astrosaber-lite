@@ -15,7 +15,13 @@ from PySide6 import QtCore
 from PySide6.QtGui import QFont, QPixmap
 
 from validators import NumbersOnly, FloatsOnly
-from custom_style import set_highlight, set_normal_style, set_bold, set_normal_font
+from custom_style import (
+    set_highlight,
+    set_normal_style,
+    set_bold,
+    set_large_font,
+    set_normal_font,
+)
 from animated_toggle import AnimatedToggle
 from astrosaber.hisa import HisaExtraction
 
@@ -68,11 +74,19 @@ class saberWidget(QWidget):
         self.addres_toggle.setChecked(True)
 
         # lambda field
-        self.text_holder_label_lam1 = QLabel("Lambda 1*")
+        self.text_holder_label_lam1 = QLabel("\u03BB\u2081*")
+        set_large_font(self.text_holder_label_lam1)
+        self.text_holder_label_lam1.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
+        )
         self.line_edit_lam1 = QLineEdit(placeholderText="e.g. 2.")
         self.line_edit_lam1.setValidator(FloatsOnly())
 
-        self.text_holder_label_lam2 = QLabel("Lambda 2*")
+        self.text_holder_label_lam2 = QLabel("\u03BB\u2082*")
+        set_large_font(self.text_holder_label_lam2)
+        self.text_holder_label_lam2.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
+        )
         self.line_edit_lam2 = QLineEdit(placeholderText="e.g. 1.")
         self.line_edit_lam2.setValidator(FloatsOnly())
         # get style
