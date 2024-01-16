@@ -58,6 +58,8 @@ class prepareWidget(QWidget):
         self.line_edit_training.setValidator(NumbersOnly())
         # get style
         self.ss_line_edit_training = self.line_edit_training.styleSheet()
+        # connect returnKey signal to slot
+        self.line_edit_training.returnPressed.connect(self.validate_record)
         ###
 
         # noise field
@@ -66,6 +68,8 @@ class prepareWidget(QWidget):
         self.line_edit_noise.setValidator(FloatsOnly())
         # get style
         self.ss_line_edit_noise = self.line_edit_noise.styleSheet()
+        # connect returnKey signal to slot
+        self.line_edit_noise.returnPressed.connect(self.validate_record)
         ###
 
         # linewidth field
@@ -79,6 +83,9 @@ class prepareWidget(QWidget):
         # get style
         self.ss_line_edit_lw = self.line_edit_lw.styleSheet()
         self.ss_line_edit_lw_std = self.line_edit_lw_std.styleSheet()
+        # connect returnKey signal to slot
+        self.line_edit_lw.returnPressed.connect(self.validate_record)
+        self.line_edit_lw_std.returnPressed.connect(self.validate_record)
         ###
 
         # button to set params

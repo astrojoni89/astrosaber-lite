@@ -10,7 +10,6 @@ from saber_widget import saberWidget
 class mainWidget(QWidget):
     def __init__(self, app):
         super().__init__()
-        self.app = app
 
         self.setWindowTitle("astrosaber lite")
         self.setWindowIcon(QIcon("images/icon.ico"))
@@ -37,20 +36,11 @@ class mainWidget(QWidget):
         self.tabwidget.tab1.message.button(QMessageBox.Ok).clicked.connect(
             self.change_tab
         )
-        self.tabwidget.tab1.message.button(QMessageBox.Cancel).clicked.connect(
-            self.app.quit()
-        )
         self.tabwidget.tab2.message.button(QMessageBox.Ok).clicked.connect(
             self.change_tab
         )
-        self.tabwidget.tab2.message.button(QMessageBox.Cancel).clicked.connect(
-            self.app.quit()
-        )
         self.tabwidget.tab3.message.button(QMessageBox.Ok).clicked.connect(
             self.change_tab
-        )
-        self.tabwidget.tab3.message.button(QMessageBox.Cancel).clicked.connect(
-            self.app.quit()
         )
 
     def change_tab(self):

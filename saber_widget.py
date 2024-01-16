@@ -66,7 +66,8 @@ class saberWidget(QWidget):
         self.line_edit_noise.setValidator(FloatsOnly())
         # get style
         self.ss_line_edit_noise = self.line_edit_noise.styleSheet()
-        ###
+        # connect returnKey signal to slot
+        self.line_edit_noise.returnPressed.connect(self.validate_record)
 
         # phase field
         self.text_holder_label_phase = QLabel("Two-phase")
@@ -105,7 +106,9 @@ class saberWidget(QWidget):
         # get style
         self.ss_line_edit_lam1 = self.line_edit_lam1.styleSheet()
         self.ss_line_edit_lam2 = self.line_edit_lam2.styleSheet()
-        ###
+        # connect returnKey signal to slot
+        self.line_edit_lam1.returnPressed.connect(self.validate_record)
+        self.line_edit_lam2.returnPressed.connect(self.validate_record)
 
         # ncpus field
         self.text_holder_label_ncpus = QLabel("#CPUs")
@@ -114,6 +117,8 @@ class saberWidget(QWidget):
         self.text_label_available_ncpus = QLabel("/" + str(multiprocessing.cpu_count()))
         # get style
         self.ss_line_edit_ncpus = self.line_edit_ncpus.styleSheet()
+        # connect returnKey signal to slot
+        self.line_edit_ncpus.returnPressed.connect(self.validate_record)
         ###
 
         # button to set params
