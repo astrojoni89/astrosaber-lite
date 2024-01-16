@@ -162,12 +162,13 @@ class optimizeWidget(QWidget):
         set_normal_font(self.text_holder_label_lam1)
 
         # lam2 sect.
-        if self.line_edit_lam2.text() == "":
-            self.status_label.setText("Missing required fields.")
-            self.line_edit_lam2.setFocus()
-            set_highlight(self.line_edit_lam2)
-            set_bold(self.text_holder_label_lam2)
-            return
+        if self.phase_toggle.isChecked():
+            if self.line_edit_lam2.text() == "":
+                self.status_label.setText("Missing required fields.")
+                self.line_edit_lam2.setFocus()
+                set_highlight(self.line_edit_lam2)
+                set_bold(self.text_holder_label_lam2)
+                return
 
         # lam2 sect.
         set_normal_style(self.line_edit_lam2, self.ss_line_edit_lam2)
