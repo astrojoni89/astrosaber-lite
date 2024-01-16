@@ -1,16 +1,4 @@
-from PySide6.QtCore import (
-    Qt,
-    QSize,
-    QPoint,
-    QPointF,
-    QRectF,
-    QEasingCurve,
-    QPropertyAnimation,
-    QSequentialAnimationGroup,
-    Slot,
-    Property,
-)
-
+from PySide6.QtCore import Qt, QSize, QPoint, QPointF, QRectF, QEasingCurve, QPropertyAnimation, QSequentialAnimationGroup, Slot, Property
 from PySide6.QtWidgets import QCheckBox
 from PySide6.QtGui import QColor, QBrush, QPaintEvent, QPen, QPainter
 

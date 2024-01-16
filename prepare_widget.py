@@ -1,17 +1,4 @@
-from PySide6.QtWidgets import (
-    QWidget,
-    QPushButton,
-    QVBoxLayout,
-    QHBoxLayout,
-    QGridLayout,
-    QSizePolicy,
-    QMessageBox,
-    QFileDialog,
-    QLabel,
-    QLineEdit,
-)
-from PySide6 import QtCore
-from PySide6.QtGui import QFont, QPixmap
+from PySide6.QtWidgets import QWidget, QPushButton, QGridLayout, QSizePolicy, QMessageBox, QFileDialog, QLabel, QLineEdit
 
 from validators import NumbersOnly, FloatsOnly
 from custom_style import set_highlight, set_normal_style, set_bold, set_normal_font
