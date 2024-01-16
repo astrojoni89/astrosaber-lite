@@ -1,5 +1,14 @@
 import multiprocessing
-from PySide6.QtWidgets import QWidget, QPushButton, QGridLayout, QSizePolicy, QMessageBox, QFileDialog, QLabel, QLineEdit
+from PySide6.QtWidgets import (
+    QWidget,
+    QPushButton,
+    QGridLayout,
+    QSizePolicy,
+    QMessageBox,
+    QFileDialog,
+    QLabel,
+    QLineEdit,
+)
 from PySide6 import QtCore
 
 from validators import NumbersOnly, FloatsOnly
@@ -201,7 +210,7 @@ class optimizeWidget(QWidget):
     def status_update(self):
         # self.status_label.setAlignment(QtCore.Qt.AlignLeft)
         self.status_label.setText(
-            f"Two-phase: {self.phase_toggle.isChecked()}, Add residual: {self.addres_toggle.isChecked()}\nSet Lambda 1 to {float(self.line_edit_lam1.text())}, Set Lambda 2 to {float(self.line_edit_lam2.text())}\nSet number of CPUs to {int(self.line_edit_ncpus.text())}"
+            f"Two-phase: {self.phase_toggle.isChecked()}, Add residual: {self.addres_toggle.isChecked()}\nSet initial \u03BB\u2081 to {float(self.line_edit_lam1.text())}, Set initial \u03BB\u2082 to {float(self.line_edit_lam2.text())}\nSet number of CPUs to {int(self.line_edit_ncpus.text())}"
         )
 
     def information_box(self):
