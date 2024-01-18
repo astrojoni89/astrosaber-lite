@@ -191,6 +191,7 @@ class prepareWidget(QWidget):
 
     def run_prepare(self):
         if self.status_param:
+            self.status_label.setText("Preparation run in progress...")
             self.prep.prepare_training()
             self.information_box()
 

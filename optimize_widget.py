@@ -205,6 +205,7 @@ class optimizeWidget(QWidget):
 
     def run_optimize(self):
         if self.status_param:
+            self.status_label.setText("Optimization in progress...")
             self.train.training()
             self.information_box()
 

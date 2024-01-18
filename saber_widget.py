@@ -243,6 +243,7 @@ class saberWidget(QWidget):
 
     def run_optimize(self):
         if self.status_param:
+            self.status_label.setText("Extraction in progress...")
             self.hisa.saber()
             self.information_box()
 
