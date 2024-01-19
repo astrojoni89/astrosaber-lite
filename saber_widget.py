@@ -271,6 +271,7 @@ class saberWidget(QWidget):
     def onFinished(self):
         # Stop the pulsation
         self.progressBar.setRange(0, 1)
+        self.progressBar.setValue(1)
         self.status_label.setText("Finished!")
         self.information_box()
 
