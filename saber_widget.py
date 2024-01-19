@@ -124,7 +124,7 @@ class saberWidget(QWidget):
         button_set_param.clicked.connect(self.validate_record)
 
         # NEW Create a progress bar and a button and add them to the main layout
-        self.progressBar = QProgressBar(self)
+        self.progressBar = ProgressBar()
         self.progressBar.setRange(0, 1)
 
         # button to run prepare
@@ -298,3 +298,18 @@ class TaskThread(QtCore.QThread):
     def run(self):
         self.hisa.saber()
         self.taskFinished.emit()
+
+
+class ProgressBar(QProgressBar):
+    def __init__(self):
+        super().__init__()
+        self.setRange(0, 0)
+        self.change_style()
+
+    def change_style(self):
+        css = """
+            ::chunk{
+                width: 10px;
+            }
+        """
+        self.setStyleSheet(css)
