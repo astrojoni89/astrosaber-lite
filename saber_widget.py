@@ -226,8 +226,8 @@ class saberWidget(QWidget):
         ###initialize training set preparation
         self.hisa = HisaExtraction(fitsfile=self.filename[0])
 
-        ###you can adjust the number of cpus to use
-        self.hisa.ncpus = int(self.line_edit_ncpus.text())
+        ###set the noise
+        self.hisa.noise = float(self.line_edit_noise.text())
 
         ###smoothing phase and add residual
         if self.phase_toggle.isChecked():
@@ -237,9 +237,12 @@ class saberWidget(QWidget):
 
         self.hisa.add_residual = self.addres_toggle.isChecked()
 
-        ###set the initial guesses for the smoothing parameters (better to start low rather than high)
+        ###set the initial guesses for the smoothing parameters
         self.hisa.lam1 = float(self.line_edit_lam1.text())
         self.hisa.lam2 = float(self.line_edit_lam2.text())
+
+        ###number of cpus to use
+        self.hisa.ncpus = int(self.line_edit_ncpus.text())
 
     def run_optimize(self):
         if self.status_param:
