@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QLabel,
     QLineEdit,
+    QProgressBar,
 )
 from PySide6 import QtCore
 
@@ -122,6 +123,10 @@ class saberWidget(QWidget):
         button_set_param = QPushButton("Set Parameters")
         button_set_param.clicked.connect(self.validate_record)
 
+        # NEW Create a progress bar and a button and add them to the main layout
+        self.progressBar = QProgressBar(self)
+        self.progressBar.setRange(0, 1)
+
         # button to run prepare
         button_run_optimize = QPushButton("Run SABER")
         set_bold(button_run_optimize)
@@ -154,8 +159,10 @@ class saberWidget(QWidget):
         layout.addWidget(button_set_param, 6, 1, 1, 2)
         # status label
         layout.addWidget(self.status_label, 7, 0, 1, 4)
+        # NEW
+        layout.addWidget(self.progressBar, 8, 0, 1, 4)
         # run_optimize button
-        layout.addWidget(button_run_optimize, 8, 1, 1, 2)
+        layout.addWidget(button_run_optimize, 9, 1, 1, 2)
 
         self.setLayout(layout)
 
@@ -244,11 +251,28 @@ class saberWidget(QWidget):
         ###number of cpus to use
         self.hisa.ncpus = int(self.line_edit_ncpus.text())
 
+        # NEW
+        self.myLongTask = TaskThread(self.hisa)
+        self.myLongTask.taskFinished.connect(self.onFinished)
+
+    # def run_optimize(self):
+    #    if self.status_param:
+    #        self.status_label.setText("Extraction in progress...")
+    #        self.hisa.saber()
+    #        self.information_box()
+    # NEW
     def run_optimize(self):
         if self.status_param:
+            self.progressBar.setRange(0, 0)
             self.status_label.setText("Extraction in progress...")
-            self.hisa.saber()
-            self.information_box()
+            self.myLongTask.start()
+
+    # NEW
+    def onFinished(self):
+        # Stop the pulsation
+        self.progressBar.setRange(0, 1)
+        self.status_label.setText("Finished!")
+        self.information_box()
 
     def status_update(self):
         # self.status_label.setAlignment(QtCore.Qt.AlignLeft)
@@ -261,3 +285,15 @@ class saberWidget(QWidget):
         ret = self.message.exec()
         if ret == QMessageBox.Cancel:
             self.app.quit()
+
+
+class TaskThread(QtCore.QThread):
+    taskFinished = QtCore.Signal()
+
+    def __init__(self, hisa_obj):
+        super().__init__()
+        self.hisa = hisa_obj
+
+    def run(self):
+        self.hisa.saber()
+        self.taskFinished.emit()
