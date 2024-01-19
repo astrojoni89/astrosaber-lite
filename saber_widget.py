@@ -231,9 +231,9 @@ class saberWidget(QWidget):
 
         ###smoothing phase and add residual
         if self.phase_toggle.isChecked():
-            self.hisa.smoothing = "two"
+            self.hisa.phase = "two"
         else:
-            self.hisa.smoothing = "one"
+            self.hisa.phase = "one"
 
         self.hisa.add_residual = self.addres_toggle.isChecked()
 
