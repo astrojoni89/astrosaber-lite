@@ -7,7 +7,7 @@
 # astroSABER-lite GUI application
 <img src="./images/astrosaber_lite_final.gif" width="480">
 
-Lighweight GUI application of the astrosaber package.
+Lightweight GUI application of the astrosaber package.
 Check out [astrosaber](https://github.com/astrojoni89/astrosaber) for more info!
 
 ### Dependencies
