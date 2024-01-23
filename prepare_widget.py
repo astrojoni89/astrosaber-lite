@@ -23,7 +23,7 @@ class prepareWidget(QWidget):
 
         self.filename = None
 
-        self.resize(self.sizeHint())
+        # self.resize(self.sizeHint())
 
         # initialize info box
         self.message = QMessageBox()
@@ -62,6 +62,7 @@ class prepareWidget(QWidget):
 
         # noise field
         self.text_holder_label_noise = QLabel("Noise*")
+        self.text_holder_label_noise.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.line_edit_noise = QLineEdit(placeholderText="e.g. 4.")
         self.line_edit_noise.setValidator(FloatsOnly())
         # get style

@@ -25,7 +25,7 @@ class optimizeWidget(QWidget):
 
         self.filename = None
 
-        self.resize(self.sizeHint())
+        # self.resize(self.sizeHint())
 
         # initialize info box
         self.message = QMessageBox()
@@ -54,28 +54,26 @@ class optimizeWidget(QWidget):
 
         # phase field
         self.text_holder_label_phase = QLabel("Two-phase")
-        self.text_holder_label_phase.setAlignment(
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
-        )
+        self.text_holder_label_phase.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.phase_toggle = AnimatedToggle()
         self.phase_toggle.setFixedSize(self.phase_toggle.sizeHint())
         self.phase_toggle.setChecked(True)
 
         # add residual
         self.text_holder_label_addres = QLabel("Add residual")
-        self.text_holder_label_addres.setAlignment(
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
-        )
+        self.text_holder_label_addres.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.addres_toggle = AnimatedToggle()
         self.addres_toggle.setFixedSize(self.addres_toggle.sizeHint())
         self.addres_toggle.setChecked(True)
 
         # lambda field
         self.text_holder_label_lam1 = QLabel("Initial \u03BB\u2081*")
+        self.text_holder_label_lam1.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.line_edit_lam1 = QLineEdit(placeholderText="e.g. 2.")
         self.line_edit_lam1.setValidator(FloatsOnly())
 
         self.text_holder_label_lam2 = QLabel("Initial \u03BB\u2082*")
+        self.text_holder_label_lam2.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.line_edit_lam2 = QLineEdit(placeholderText="e.g. 1.")
         self.line_edit_lam2.setValidator(FloatsOnly())
         # get style
@@ -87,9 +85,12 @@ class optimizeWidget(QWidget):
 
         # ncpus field
         self.text_holder_label_ncpus = QLabel("#CPUs")
+        self.text_holder_label_ncpus.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.text_holder_label_ncpus.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.line_edit_ncpus = QLineEdit(placeholderText="e.g. 4")
         self.line_edit_ncpus.setValidator(NumbersOnly())
         self.text_label_available_ncpus = QLabel("/" + str(multiprocessing.cpu_count()))
+        self.text_label_available_ncpus.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         # get style
         self.ss_line_edit_ncpus = self.line_edit_ncpus.styleSheet()
         # connect returnKey signal to slot
