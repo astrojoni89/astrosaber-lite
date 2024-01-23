@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QLabel,
     QLineEdit,
+    QProgressBar,
 )
 from PySide6 import QtCore
 
@@ -99,7 +100,11 @@ class optimizeWidget(QWidget):
         button_set_param = QPushButton("Set Parameters")
         button_set_param.clicked.connect(self.validate_record)
 
-        # button to run prepare
+        # NEW Create a progress bar and a button and add them to the main layout
+        self.progressBar = ProgressBar()
+        self.progressBar.setRange(0, 1)
+
+        # button to run optmization
         button_run_optimize = QPushButton("Optimize")
         set_bold(button_run_optimize)
         button_run_optimize.clicked.connect(self.run_optimize)
@@ -128,8 +133,10 @@ class optimizeWidget(QWidget):
         layout.addWidget(button_set_param, 5, 1, 1, 2)
         # status label
         layout.addWidget(self.status_label, 6, 0, 1, 4)
+        # NEW
+        layout.addWidget(self.progressBar, 7, 0, 1, 4)
         # run_optimize button
-        layout.addWidget(button_run_optimize, 7, 1, 1, 2)
+        layout.addWidget(button_run_optimize, 8, 1, 1, 2)
 
         self.setLayout(layout)
 
@@ -188,9 +195,6 @@ class optimizeWidget(QWidget):
         ###initialize training set preparation
         self.train = saberTraining(pickle_file=self.filename[0])
 
-        ###you can adjust the number of cpus to use
-        self.train.ncpus = int(self.line_edit_ncpus.text())
-
         ###smoothing phase and add residual
         if self.phase_toggle.isChecked():
             self.train.smoothing = "two"
@@ -203,11 +207,32 @@ class optimizeWidget(QWidget):
         self.train.lam1_initial = float(self.line_edit_lam1.text())
         self.train.lam2_initial = float(self.line_edit_lam2.text())
 
+        ###number of cpus to use
+        self.train.ncpus = int(self.line_edit_ncpus.text())
+
+        # NEW
+        self.myLongTask = TaskThread(self.train)
+        self.myLongTask.taskFinished.connect(self.onFinished)
+
+    # def run_optimize(self):
+    #    if self.status_param:
+    #        self.status_label.setText("Optimization in progress...")
+    #        self.train.training()
+    #        self.information_box()
+    # NEW
     def run_optimize(self):
         if self.status_param:
+            self.progressBar.setRange(0, 0)
             self.status_label.setText("Optimization in progress...")
-            self.train.training()
-            self.information_box()
+            self.myLongTask.start()
+
+    # NEW
+    def onFinished(self):
+        # Stop the pulsation
+        self.progressBar.setRange(0, 1)
+        self.progressBar.setValue(1)
+        self.status_label.setText("Finished!")
+        self.information_box()
 
     def status_update(self):
         # self.status_label.setAlignment(QtCore.Qt.AlignLeft)
@@ -220,3 +245,30 @@ class optimizeWidget(QWidget):
         ret = self.message.exec()
         if ret == QMessageBox.Cancel:
             self.app.quit()
+
+
+class TaskThread(QtCore.QThread):
+    taskFinished = QtCore.Signal()
+
+    def __init__(self, hisa_obj):
+        super().__init__()
+        self.hisa = hisa_obj
+
+    def run(self):
+        self.hisa.training()
+        self.taskFinished.emit()
+
+
+class ProgressBar(QProgressBar):
+    def __init__(self):
+        super().__init__()
+        self.setRange(0, 0)
+        # self.change_style()
+
+    def change_style(self):
+        css = """
+            ::chunk{
+                width: 50px;
+            }
+        """
+        self.setStyleSheet(css)

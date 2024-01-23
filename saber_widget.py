@@ -127,10 +127,10 @@ class saberWidget(QWidget):
         self.progressBar = ProgressBar()
         self.progressBar.setRange(0, 1)
 
-        # button to run prepare
-        button_run_optimize = QPushButton("Run SABER")
-        set_bold(button_run_optimize)
-        button_run_optimize.clicked.connect(self.run_optimize)
+        # button to run saber
+        button_run_saber = QPushButton("Run SABER")
+        set_bold(button_run_saber)
+        button_run_saber.clicked.connect(self.run_saber)
 
         # Layouts
         layout = QGridLayout()
@@ -161,8 +161,8 @@ class saberWidget(QWidget):
         layout.addWidget(self.status_label, 7, 0, 1, 4)
         # NEW
         layout.addWidget(self.progressBar, 8, 0, 1, 4)
-        # run_optimize button
-        layout.addWidget(button_run_optimize, 9, 1, 1, 2)
+        # run_saber button
+        layout.addWidget(button_run_saber, 9, 1, 1, 2)
 
         self.setLayout(layout)
 
@@ -255,13 +255,13 @@ class saberWidget(QWidget):
         self.myLongTask = TaskThread(self.hisa)
         self.myLongTask.taskFinished.connect(self.onFinished)
 
-    # def run_optimize(self):
+    # def run_saber(self):
     #    if self.status_param:
     #        self.status_label.setText("Extraction in progress...")
     #        self.hisa.saber()
     #        self.information_box()
     # NEW
-    def run_optimize(self):
+    def run_saber(self):
         if self.status_param:
             self.progressBar.setRange(0, 0)
             self.status_label.setText("Extraction in progress...")
@@ -304,12 +304,12 @@ class ProgressBar(QProgressBar):
     def __init__(self):
         super().__init__()
         self.setRange(0, 0)
-        self.change_style()
+        #self.change_style()
 
     def change_style(self):
         css = """
             ::chunk{
-                width: 10px;
+                width: 50px;
             }
         """
         self.setStyleSheet(css)

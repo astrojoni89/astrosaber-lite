@@ -1,5 +1,16 @@
-from PySide6.QtWidgets import QWidget, QPushButton, QGridLayout, QSizePolicy, QMessageBox, QFileDialog, QLabel, QLineEdit
+from PySide6.QtWidgets import (
+    QWidget,
+    QPushButton,
+    QGridLayout,
+    QSizePolicy,
+    QMessageBox,
+    QFileDialog,
+    QLabel,
+    QLineEdit,
+    QProgressBar,
+)
 
+from PySide6 import QtCore
 from validators import NumbersOnly, FloatsOnly
 from custom_style import set_highlight, set_normal_style, set_bold, set_normal_font
 from astrosaber.prepare_training import saberPrepare
@@ -79,6 +90,10 @@ class prepareWidget(QWidget):
         button_set_param = QPushButton("Set Parameters")
         button_set_param.clicked.connect(self.validate_record)
 
+        # NEW Create a progress bar and a button and add them to the main layout
+        self.progressBar = ProgressBar()
+        self.progressBar.setRange(0, 1)
+
         # button to run prepare
         button_run_prepare = QPushButton("Prepare data")
         set_bold(button_run_prepare)
@@ -105,8 +120,10 @@ class prepareWidget(QWidget):
         layout.addWidget(button_set_param, 5, 1, 1, 2)
         # status label
         layout.addWidget(self.status_label, 6, 0, 1, 4)
+        # NEW
+        layout.addWidget(self.progressBar, 7, 0, 1, 4)
         # run_prepare button
-        layout.addWidget(button_run_prepare, 7, 1, 1, 2)
+        layout.addWidget(button_run_prepare, 8, 1, 1, 2)
 
         self.setLayout(layout)
 
@@ -189,11 +206,29 @@ class prepareWidget(QWidget):
             self.line_edit_lw_std.text()
         )  # standard deviation of the linewidth distribution [km/s]
 
+        # NEW
+        self.myLongTask = TaskThread(self.prep)
+        self.myLongTask.taskFinished.connect(self.onFinished)
+
+    # def run_prepare(self):
+    #    if self.status_param:
+    #        self.status_label.setText("Preparation run in progress...")
+    #        self.prep.prepare_training()
+    #        self.information_box()
+    # NEW
     def run_prepare(self):
         if self.status_param:
-            self.status_label.setText("Preparation run in progress...")
-            self.prep.prepare_training()
-            self.information_box()
+            self.progressBar.setRange(0, 0)
+            self.status_label.setText("Preparation in progress...")
+            self.myLongTask.start()
+
+    # NEW
+    def onFinished(self):
+        # Stop the pulsation
+        self.progressBar.setRange(0, 1)
+        self.progressBar.setValue(1)
+        self.status_label.setText("Finished!")
+        self.information_box()
 
     def status_update(self):
         # self.status_label.setAlignment(QtCore.Qt.AlignLeft)
@@ -208,3 +243,30 @@ class prepareWidget(QWidget):
         ret = self.message.exec()
         if ret == QMessageBox.Cancel:
             self.app.quit()
+
+
+class TaskThread(QtCore.QThread):
+    taskFinished = QtCore.Signal()
+
+    def __init__(self, hisa_obj):
+        super().__init__()
+        self.hisa = hisa_obj
+
+    def run(self):
+        self.hisa.prepare_training()
+        self.taskFinished.emit()
+
+
+class ProgressBar(QProgressBar):
+    def __init__(self):
+        super().__init__()
+        self.setRange(0, 0)
+        # self.change_style()
+
+    def change_style(self):
+        css = """
+            ::chunk{
+                width: 50px;
+            }
+        """
+        self.setStyleSheet(css)
